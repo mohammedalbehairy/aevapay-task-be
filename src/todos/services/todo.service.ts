@@ -14,6 +14,10 @@ export class TodoService {
     return await this.todoRepository.create(createTodoDto);
   }
 
+  async getTodos(): Promise<Todo[]> {
+    return await this.todoRepository.list();
+  }
+
   async updateTodo(
     todoId: string,
     updateTodoDto: UpdateTodoDto,

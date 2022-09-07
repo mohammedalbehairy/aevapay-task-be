@@ -21,6 +21,10 @@ export class TodoRepository {
     return todo.save();
   }
 
+  async list(): Promise<Todo[]> {
+    return await this.todoModel.find({});
+  }
+
   async update(todoId: string, updateTodoDto: UpdateTodoDto): Promise<Todo> {
     let todo = await this.todoModel.findByIdAndUpdate(todoId, updateTodoDto, {
       new: true,

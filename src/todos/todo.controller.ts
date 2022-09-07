@@ -44,7 +44,24 @@ export class TodoController {
     }
   }
 
+  @Get('/')
+  @ApiOperation({ summary: 'Get TODOs' })
+  async getTodo(@Req() req, @Res() res) {
+    try {
+      let todos = await this.todoService.getTodos();
+      return res.status(201).json({
+        error: false,
+        message: 'Todos loaded succefully',
+        data: todos,
+      });
+    } catch (err) {
+      Logger.error(err);
+      throw err;
+    }
+  }
+
   @Put(':todoId')
+  @ApiOperation({ summary: 'Update TODO' })
   async updateTodo(
     @Param() params: TodoIdDto,
     @Body() updateTodoDto: UpdateTodoDto,
@@ -66,6 +83,7 @@ export class TodoController {
   }
 
   @Delete(':todoId')
+  @ApiOperation({ summary: 'Delete TODO' })
   async deleteTodo(@Param() params: TodoIdDto, @Req() req, @Res() res) {
     try {
       await this.todoService.deleteTodo(params.todoId);
@@ -79,6 +97,7 @@ export class TodoController {
   }
 
   @Put(':todoId/isCompolete')
+  @ApiOperation({ summary: 'Set TODO as completed' })
   async updateTodoIsCompolete(
     @Param() params: TodoIdDto,
     @Req() req,
@@ -102,6 +121,7 @@ export class TodoController {
   //#region ----------------- Items --------------------
 
   @Get(':todoId/items')
+  @ApiOperation({ summary: 'List TODO items' })
   async getTodoItems(@Param() params: TodoIdDto, @Req() req, @Res() res) {
     try {
       let items = await this.todoService.getTodoItems(params.todoId);
@@ -117,6 +137,7 @@ export class TodoController {
   }
 
   @Delete(':todoId/items/:itemId')
+  @ApiOperation({ summary: 'Delete specific item from TODO' })
   async deleteTodoItem(@Param() params: TodoItemDto, @Req() req, @Res() res) {
     try {
       let items = await this.todoService.deleteTodoItem(
@@ -135,6 +156,7 @@ export class TodoController {
   }
 
   @Post(':todoId/items')
+  @ApiOperation({ summary: 'Insert item in TODO' })
   async AddTodoItem(
     @Param() params: TodoIdDto,
     @Body() createItemDto: CreateItemDto,
@@ -180,6 +202,7 @@ export class TodoController {
   }
 
   @Put(':todoId/items/:itemId')
+  @ApiOperation({ summary: 'Update item in the TODO' })
   async updateTodoItem(
     @Param() params: TodoItemDto,
     @Body() updateItemDto: UpdateItemDto,

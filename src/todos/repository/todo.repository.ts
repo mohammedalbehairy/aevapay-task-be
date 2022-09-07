@@ -11,9 +11,10 @@ import { CreateTodoDto } from '../dtos/create-todo.dto';
 import { UpdateItemDto } from '../dtos/update-item.dto';
 import { UpdateTodoDto } from '../dtos/update-todo.dto';
 import { Todo, TodoDocument } from '../models/todo.schema';
+import { ITodoRepository } from './todo.repository.interface';
 
 @Injectable()
-export class TodoRepository {
+export class TodoRepository implements ITodoRepository {
   constructor(@InjectModel('Todo') private todoModel: Model<TodoDocument>) {}
 
   async create(todoDto: CreateTodoDto): Promise<Todo> {

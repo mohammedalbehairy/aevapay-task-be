@@ -8,8 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        // uri: configService.get<string>('DB_MONGO_URI'), // TODO: check it
-        uri: 'mongodb://localhost:27017/aevapay-task-be',
+        uri: configService.get<string>('DB_MONGO_URI'),
         useNewUrlParser: true,
         useUnifiedTopology: true,
         autoIndex: false,
@@ -17,4 +16,4 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     }),
   ],
 })
-export class DbModule { }
+export class DbModule {}

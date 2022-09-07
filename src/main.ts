@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
@@ -7,9 +8,13 @@ import { openapiConfig } from './config/openapi';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
-  app.useGlobalFilters(new HttpExceptionFilter())
+  app.useGlobalFilters(new HttpExceptionFilter());
+  const configService = app.get(ConfigService);
   const document = SwaggerModule.createDocument(app, openapiConfig);
   SwaggerModule.setup('docs', app, document);
-  await app.listen(3000);
+  const port = configService.get<string>('PORT');
+  await app.listen(port, () =>
+    console.log(`app is listening to port ${port} ......`),
+  );
 }
 bootstrap();

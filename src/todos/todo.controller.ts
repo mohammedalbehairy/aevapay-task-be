@@ -217,7 +217,7 @@ export class TodoController {
       );
       return res.status(200).json({
         error: false,
-        message: 'Item updated succefully',
+        message: 'Item updated successfully',
         data: items,
       });
     } catch (err) {

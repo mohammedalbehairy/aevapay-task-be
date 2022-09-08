@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { from, map, Observable, of } from 'rxjs';
 import { CreateItemDto } from '../dtos/create-item.dto';
 import { CreateTodoDto } from '../dtos/create-todo.dto';
 import { UpdateItemDto } from '../dtos/update-item.dto';
@@ -17,13 +18,13 @@ import { ITodoRepository } from './todo.repository.interface';
 export class TodoRepository implements ITodoRepository {
   constructor(@InjectModel('Todo') private todoModel: Model<TodoDocument>) {}
 
-  async create(todoDto: CreateTodoDto): Promise<Todo> {
+  create(todoDto: CreateTodoDto): Observable<Todo> {
     const todo = new this.todoModel(todoDto);
-    return todo.save();
+    return from(todo.save());
   }
 
-  async list(): Promise<Todo[]> {
-    return await this.todoModel.find({});
+  list(): Observable<any> {
+    return from(this.todoModel.find({}));
   }
 
   async update(todoId: string, updateTodoDto: UpdateTodoDto): Promise<Todo> {

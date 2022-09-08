@@ -11,6 +11,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { map } from 'rxjs';
 import { CreateItemDto } from './dtos/create-item.dto';
 import { CreateTodoDto } from './dtos/create-todo.dto';
 import { TodoIdDto } from './dtos/todo-id.dto';
@@ -28,16 +29,17 @@ export class TodoController {
 
   @Post('/')
   @ApiOperation({ summary: 'Creating TODO' })
-  async createTodo(
-    @Body() createTodoDto: CreateTodoDto,
-    @Req() req,
-    @Res() res,
-  ) {
+  createTodo(@Body() createTodoDto: CreateTodoDto, @Req() req, @Res() res) {
     try {
-      let todo = await this.todoService.createTodo(createTodoDto);
-      return res
-        .status(201)
-        .json({ error: false, message: 'Todo created succefully', data: todo });
+      return this.todoService.createTodo(createTodoDto).pipe(
+        map((todo) => {
+          return res.status(201).json({
+            error: false,
+            message: 'Todo created succefully',
+            data: todo,
+          });
+        }),
+      );
     } catch (err) {
       Logger.error(err);
       throw err;
@@ -46,14 +48,17 @@ export class TodoController {
 
   @Get('/')
   @ApiOperation({ summary: 'Get TODOs' })
-  async getTodo(@Req() req, @Res() res) {
+  getTodo(@Req() req, @Res() res) {
     try {
-      let todos = await this.todoService.getTodos();
-      return res.status(201).json({
-        error: false,
-        message: 'Todos loaded succefully',
-        data: todos,
-      });
+      return this.todoService.getTodos().pipe(
+        map((todos) => {
+          return res.status(201).json({
+            error: false,
+            message: 'Todos loaded succefully',
+            data: todos,
+          });
+        }),
+      );
     } catch (err) {
       Logger.error(err);
       throw err;

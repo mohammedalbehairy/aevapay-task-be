@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { Observable } from 'rxjs';
 import { CreateItemDto } from '../dtos/create-item.dto';
 import { CreateTodoDto } from '../dtos/create-todo.dto';
 import { UpdateItemDto } from '../dtos/update-item.dto';
@@ -13,12 +14,12 @@ export class TodoService {
     @Inject('ITodoRepository') private todoRepository: ITodoRepository,
   ) {}
 
-  async createTodo(createTodoDto: CreateTodoDto): Promise<Todo> {
-    return await this.todoRepository.create(createTodoDto);
+  createTodo(createTodoDto: CreateTodoDto): Observable<Todo> {
+    return this.todoRepository.create(createTodoDto);
   }
 
-  async getTodos(): Promise<Todo[]> {
-    return await this.todoRepository.list();
+  getTodos(): Observable<Todo[]> {
+    return this.todoRepository.list();
   }
 
   async updateTodo(

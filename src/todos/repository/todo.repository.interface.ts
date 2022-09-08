@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { CreateItemDto } from '../dtos/create-item.dto';
 import { CreateTodoDto } from '../dtos/create-todo.dto';
 import { UpdateItemDto } from '../dtos/update-item.dto';
@@ -5,8 +6,8 @@ import { UpdateTodoDto } from '../dtos/update-todo.dto';
 import { Todo } from '../models/todo.schema';
 
 export interface ITodoRepository {
-  create(body: CreateTodoDto): Promise<Todo>;
-  list(): Promise<Todo[]>;
+  create(body: CreateTodoDto): Observable<Todo>;
+  list(): Observable<Todo[]>;
   update(todoId: string, body: UpdateTodoDto): Promise<Todo>;
   delete(todoId: string): Promise<Todo>;
   updateTodoIsCompolete(todoId: string): Promise<Todo>;
